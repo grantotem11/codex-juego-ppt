@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piedra, Papel o Tijera</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game" aria-labelledby="game-title">
+      <section class="game__panel">
+        <h1 id="game-title">Piedra, Papel o Tijera</h1>
+        <p class="game__description">
+          Elige una opción y compite contra la computadora. ¡Primero en llegar a
+          cinco puntos gana!
+        </p>
+        <div class="scoreboard" aria-live="polite">
+          <div class="scoreboard__row" aria-label="Marcador">
+            <span class="scoreboard__label" id="player-label">Tú</span>
+            <span class="scoreboard__score" id="player-score">0</span>
+            <span class="scoreboard__divider">-</span>
+            <span class="scoreboard__score" id="cpu-score">0</span>
+            <span class="scoreboard__label" id="cpu-label">CPU</span>
+          </div>
+          <p class="scoreboard__best" id="best-streak" aria-live="polite">
+            Mejor racha: 0
+          </p>
+        </div>
+        <section class="result" aria-live="polite">
+          <h2 class="result__title" id="round-result">Haz tu elección</h2>
+          <p class="result__detail" id="round-detail"></p>
+        </section>
+        <section class="controls" aria-label="Controles del juego">
+          <div class="controls__buttons" role="group" aria-labelledby="controls-title">
+            <h2 id="controls-title" class="controls__title">Elige tu jugada</h2>
+            <button type="button" class="choice" data-choice="piedra" aria-label="Elegir piedra">
+              Piedra
+            </button>
+            <button type="button" class="choice" data-choice="papel" aria-label="Elegir papel">
+              Papel
+            </button>
+            <button type="button" class="choice" data-choice="tijera" aria-label="Elegir tijera">
+              Tijera
+            </button>
+          </div>
+          <button type="button" class="reset" id="reset-button" hidden>
+            Reiniciar partida
+          </button>
+        </section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
