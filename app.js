@@ -20,6 +20,10 @@ const choiceButtons = Array.from(document.querySelectorAll(".choice"));
 const resetButton = document.getElementById("reset-button");
 const resultSection = document.querySelector(".result");
 const muteButton = document.getElementById("mute-button");
+const reduceMotionQuery =
+  typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : null;
 
 let audioContext;
 
@@ -68,10 +72,23 @@ function renderResult({ winner, message }, playerChoice, cpuChoice) {
   }
 }
 
-function triggerChoiceAnimation(button) {
+function prefersReducedMotion() {
+  return Boolean(reduceMotionQuery && reduceMotionQuery.matches);
+}
+
+function clearChoiceAnimations() {
   choiceButtons.forEach((choice) => {
     choice.classList.remove("choice--selected");
   });
+}
+
+function triggerChoiceAnimation(button) {
+  clearChoiceAnimations();
+
+  if (prefersReducedMotion()) {
+    return;
+  }
+
   // Fuerza un reflujo para reiniciar la animación cuando se elige varias veces
   void button.offsetWidth;
   button.classList.add("choice--selected");
@@ -79,6 +96,11 @@ function triggerChoiceAnimation(button) {
 
 function triggerLoseAnimation() {
   resultSection.classList.remove("result--shake");
+
+  if (prefersReducedMotion()) {
+    return;
+  }
+
   void resultSection.offsetWidth;
   resultSection.classList.add("result--shake");
 }
@@ -237,8 +259,8 @@ function resetGame() {
   state.isGameOver = false;
   choiceButtons.forEach((button) => {
     button.disabled = false;
-    button.classList.remove("choice--selected");
   });
+  clearChoiceAnimations();
   resetButton.hidden = true;
 
   roundResultEl.textContent = "Haz tu elección";
@@ -317,4 +339,21 @@ document.addEventListener("keydown", (event) => {
     resetButton.focus();
   }
 });
+
+if (reduceMotionQuery) {
+  const handleMotionPreference = () => {
+    if (prefersReducedMotion()) {
+      clearChoiceAnimations();
+      resultSection.classList.remove("result--shake");
+    }
+  };
+
+  if (typeof reduceMotionQuery.addEventListener === "function") {
+    reduceMotionQuery.addEventListener("change", handleMotionPreference);
+  } else if (typeof reduceMotionQuery.addListener === "function") {
+    reduceMotionQuery.addListener(handleMotionPreference);
+  }
+
+  handleMotionPreference();
+}
 
