@@ -69,7 +69,9 @@ function renderResult({ winner, message }, playerChoice, cpuChoice) {
 }
 
 function triggerChoiceAnimation(button) {
-  button.classList.remove("choice--selected");
+  choiceButtons.forEach((choice) => {
+    choice.classList.remove("choice--selected");
+  });
   // Fuerza un reflujo para reiniciar la animación cuando se elige varias veces
   void button.offsetWidth;
   button.classList.add("choice--selected");
@@ -235,6 +237,7 @@ function resetGame() {
   state.isGameOver = false;
   choiceButtons.forEach((button) => {
     button.disabled = false;
+    button.classList.remove("choice--selected");
   });
   resetButton.hidden = true;
 
